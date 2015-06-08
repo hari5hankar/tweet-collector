@@ -1,13 +1,9 @@
-import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import twitter4j.Status;
 import twitter4j.User;
 
@@ -44,6 +40,13 @@ public class TweetRecord {
 	int userFriendsCount; //check
 	//int userStatusesCount; //check
 	boolean userIsVerified; //check
+	
+/*
+String columns[] = {"statusDate", "statusId", "statusText",  "statusInReplyToStatusId",  "statusInReplyToUserId",  "statusIsRetweeted", 
+		"statusIsRetweet", "statusRetweetCount", "statusIsEnglish", 
+		"userID", "userScreenName", "userLocation", "userFollowersCount", "userFriendsCount", "userIsVerified"
+	
+ */
 	
 	public TweetRecord(Status status) {
 		User user = status.getUser();
@@ -92,14 +95,13 @@ public class TweetRecord {
 		
 	}
 	
-	public void appendToFile(File file){
+	public void appendToFile(){
 		
 		try{
-			CSVWriter csvWriter = new CSVWriter(new FileWriter(file, true));
-			String[] record = this.toStringArray();
-			System.out.println("Writing record: \n" + Arrays.toString(record));
-			csvWriter.writeNext(record);
-			csvWriter.close();
+			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("msnbc.txt", true)));
+			System.out.println("Writing record: \n" + this.toString());
+			printWriter.println(this.toString());
+			printWriter.close();
 		} catch (IOException e){
 			e.printStackTrace();
 		}

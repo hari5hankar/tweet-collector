@@ -1,20 +1,20 @@
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import twitter4j.FilterQuery;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
+//import twitter4j.StallWarning;
+//import twitter4j.Status;
+//import twitter4j.StatusDeletionNotice;
+//import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.ConfigurationBuilder;
+//import twitter4j.conf.ConfigurationBuilder;
 //import twitter4j.User ;
 
 public class TweetCollectorDriver {
 	
-	private final Logger LOG = LoggerFactory.getLogger(TweetCollectorDriver.class);
+//	private final Logger LOG = LoggerFactory.getLogger(TweetCollectorDriver.class);
 	
 	public static void main(String[] args) {
 
@@ -24,7 +24,7 @@ public class TweetCollectorDriver {
 		
 		FilterQuery filterQuery = new FilterQuery();
 		
-		long[] users = {96951800}; //msnbc
+		long[] users = {96951800}; //fcbarcelona //2836421 msnbc
 		filterQuery.follow(users);
 		//String[] keywords = {"RT @FCBarcelona"}; //for manual retweets
 		//filterQuery.track(keywords);
