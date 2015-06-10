@@ -8,7 +8,7 @@ public class ConfigBuilder {
 	private static Configuration configuration;
 	
 	/*
-	 *Abhishek's keys 
+	 *Abhishek's keysz 
 	 */
 	private static final String consumerKeyStr = "6xApxD6P3xPGa6fGEqeezvBTh";
 	private static final String consumerSecretStr = "sZQtcKOlTl9AtTg6ZvMcmuF31EoVk7d7tNqhU8LlwOIcMjMRyP";
