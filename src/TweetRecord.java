@@ -87,7 +87,8 @@ String columns[] = {"statusDate", "statusId", "statusText",  "statusInReplyToSta
 				+ "," + userLocation
 				+ "," + userFollowersCount
 				+ "," + userFriendsCount
-				+ "," + userIsVerified;
+				+ "," + userIsVerified
+				+ ";";
 	}
 	
 	public String[] toStringArray(){
@@ -98,8 +99,7 @@ String columns[] = {"statusDate", "statusId", "statusText",  "statusInReplyToSta
 	public void appendToFile(){
 		
 		try{
-			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("round1.txt", true)));
-			System.out.println(this.toString());
+			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("cnnbrk_round1.txt", true)));
 			printWriter.println(this.toString());
 			printWriter.close();
 		} catch (IOException e){
