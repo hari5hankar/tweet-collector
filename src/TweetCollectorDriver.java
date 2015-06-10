@@ -2,6 +2,11 @@
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 import twitter4j.FilterQuery;
 //import twitter4j.StallWarning;
 //import twitter4j.Status;
@@ -19,40 +24,48 @@ public class TweetCollectorDriver {
 	public static void main(String[] args) {
 
 		TwitterStream twitterStream = new TwitterStreamFactory(ConfigBuilder.getConfig()).getInstance();
-		EnglishStatusListener englishStatusListener = new EnglishStatusListener();
-		twitterStream.addListener(englishStatusListener);
 		
+		//2836421 msnbc //96951800 fcbarcelona
+		long[] users = {
+				/*msnbc*/
+				2836421 , 
+				/*msnbc 48 most active followers*/
+				2487791838L, 1664059166, 199056422, 227259371, 2723705754L, 20618180, 29345753, 2480891059L, 316006002, 475614488, 
+				16252960, 20476599, 874869986, 115744814, 27324239, 17082120, 37308433, 2828277842L, 47703013, 1884645062, 309190582,
+				2986301995L, 99191859, 28475404, 101405399, 61015710, 2940960137L, 3025717611L, 36459641, 632690718, 570859259, 253258167, 
+				3008459731L, 171745835, 998490372, 834672494, 207181401, 75052666, 450376679, 2939356781L, 29560634, 445406535, 765763200, 
+				37365390, 43168615, 810053322, 274422511, 364423298} ;
+		
+		ArrayList<MyStatusListener> listeners = new ArrayList<MyStatusListener>();
+		
+		for (int i = 0; i < users.length; i++){
+			listeners.add(new MyStatusListener(users[i]));
+			MyStatusListener myStatusListener = listeners.get(i);
+			twitterStream.addListener(myStatusListener);
+			
+		}
+	
 		FilterQuery filterQuery = new FilterQuery();
 		
-		long[] users = {96951800}; //fcbarcelona //2836421 msnbc
+		/*
+		 * TODO
+		 * new thread for each user. OR use the long users[] and find a way to see OnStatus is being called for which user.
+		 * follow 48 users of msnbc, save each output to <id>.txt
+		 * follow @cnnbrk
+		 * follow @barackobama
+		 * follow @katyperry
+		*/
+		
+		
 		filterQuery.follow(users);
-		//String[] keywords = {"RT @FCBarcelona"}; //for manual retweets
-		//filterQuery.track(keywords);
+		//filterQuery.track();
+		
+		/* //for manual retweets
+			String[] keywords = {"RT @FCBarcelona"}; 
+			filterQuery.track(keywords);
+		*/
+		
 		twitterStream.filter(filterQuery);
+	
 	}
 }
-
-/*
- * REST API related stuff
- */
-
-/*TwitterFactory twitterFactory = new TwitterFactory(configurationBuilder.build());
-Twitter twitter = twitterFactory.getInstance();
-
-try {
-	Query query = new Query("india");
-	QueryResult queryResult;
-	int i = 1;
-	do{
-		queryResult = twitter.search(query);
-		List<Status> tweets = queryResult.getTweets();
-		for(Status tweet: tweets){
-			System.out.println("@" + tweet.getUser().getScreenName() + " - " + tweet.getText());
-		}
-		i++;
-	}while(i == 1(query = queryResult.nextQuery()) != null);
-
-	System.out.println("Successfully updated the status in Twitter.");
-} catch (TwitterException te) {
-	te.printStackTrace();
-}*/

@@ -95,10 +95,10 @@ String columns[] = {"statusDate", "statusId", "statusText",  "statusInReplyToSta
 		
 	}
 	
-	public void appendToFile(){
+	public void appendToFile(String filename){
 		
 		try{
-			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("msnbc.txt", true)));
+			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
 			System.out.println("Writing record: \n" + this.toString());
 			printWriter.println(this.toString());
 			printWriter.close();

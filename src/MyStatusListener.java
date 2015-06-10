@@ -5,7 +5,13 @@ import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
 //import twitter4j.User;
 
-public class EnglishStatusListener implements StatusListener{
+public class MyStatusListener implements StatusListener{
+	
+	long listeningToUserID;
+
+	public MyStatusListener(long userID){
+		listeningToUserID = userID;
+	}
 	
 	public void onException(Exception ex) {
 		// TODO Auto-generated method stub
@@ -14,9 +20,10 @@ public class EnglishStatusListener implements StatusListener{
 
 	public void onStatus(Status status) {
 		// TODO Auto-generated method stub
-		TweetRecord tweetRecord = new TweetRecord(status);
-		System.out.println(tweetRecord.toString());
-		tweetRecord.appendToFile(); 
+		if (status.isRetweet()){
+			TweetRecord tweetRecord = new TweetRecord(status);
+			tweetRecord.appendToFile(Long.toString(listeningToUserID)); 			
+		}
 	}
 
 	public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
