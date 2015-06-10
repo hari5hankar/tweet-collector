@@ -95,11 +95,11 @@ String columns[] = {"statusDate", "statusId", "statusText",  "statusInReplyToSta
 		
 	}
 	
-	public void appendToFile(String filename){
+	public void appendToFile(){
 		
 		try{
-			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
-			System.out.println("Writing record: \n" + this.toString());
+			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("round1.txt", true)));
+			System.out.println(this.toString());
 			printWriter.println(this.toString());
 			printWriter.close();
 		} catch (IOException e){

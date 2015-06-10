@@ -7,12 +7,6 @@ import twitter4j.StatusListener;
 
 public class MyStatusListener implements StatusListener{
 	
-	long listeningToUserID;
-
-	public MyStatusListener(long userID){
-		listeningToUserID = userID;
-	}
-	
 	public void onException(Exception ex) {
 		// TODO Auto-generated method stub
 		
@@ -20,10 +14,9 @@ public class MyStatusListener implements StatusListener{
 
 	public void onStatus(Status status) {
 		// TODO Auto-generated method stub
-		if (status.isRetweet()){
 			TweetRecord tweetRecord = new TweetRecord(status);
-			tweetRecord.appendToFile(Long.toString(listeningToUserID)); 			
-		}
+			System.out.println(tweetRecord.toString());
+			tweetRecord.appendToFile(); 			
 	}
 
 	public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
