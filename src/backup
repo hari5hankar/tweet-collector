@@ -1,0 +1,61 @@
+
+/*
+ * REST API related stuff
+ */
+
+/*
+//Your Twitter App's Consumer Key
+        String consumerKey = "XXXXXXXXXXXXXXXXXXXXX";
+ 
+        //Your Twitter App's Consumer Secret
+        String consumerSecret = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+ 
+        //Your Twitter Access Token
+        String accessToken = "XXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+ 
+        //Your Twitter Access Token Secret
+        String accessTokenSecret = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+ 
+        //Instantiate a re-usable and thread-safe factory
+        TwitterFactory twitterFactory = new TwitterFactory();
+ 
+        //Instantiate a new Twitter instance
+        Twitter twitter = twitterFactory.getInstance();
+ 
+        //setup OAuth Consumer Credentials
+        twitter.setOAuthConsumer(consumerKey, consumerSecret);
+ 
+        //setup OAuth Access Token
+        twitter.setOAuthAccessToken(new AccessToken(accessToken, accessTokenSecret));
+
+TwitterFactory twitterFactory = new TwitterFactory(configurationBuilder.build());
+Twitter twitter = twitterFactory.getInstance();
+
+try {
+	Query query = new Query("india");
+	QueryResult queryResult;
+	int i = 1;
+	do{
+		queryResult = twitter.search(query);
+		List<Status> tweets = queryResult.getTweets();
+		for(Status tweet: tweets){
+			System.out.println("@" + tweet.getUser().getScreenName() + " - " + tweet.getText());
+		}
+		i++;
+	}while(i == 1(query = queryResult.nextQuery()) != null);
+
+	System.out.println("Successfully updated the status in Twitter.");
+} catch (TwitterException te) {
+	te.printStackTrace();
+}*/
+
+
+/*	
+	//create separate listener for each handle
+	ArrayList<MyStatusListener> listeners = new ArrayList<MyStatusListener>();
+for (int i = 0; i < users.length; i++){
+	listeners.add(new MyStatusListener(users[i]));
+	MyStatusListener myStatusListener = listeners.get(i);
+	twitterStream.addListener(myStatusListener);
+
+}*/

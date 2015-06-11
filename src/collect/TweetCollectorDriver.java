@@ -1,3 +1,4 @@
+package collect;
 
 //import org.slf4j.Logger;
 
@@ -31,15 +32,8 @@ public class TweetCollectorDriver {
 		TwitterStream twitterStream = new TwitterStreamFactory(ConfigBuilder.getConfig()).getInstance();
 		MyStatusListener myStatusListener = new MyStatusListener();
 		twitterStream.addListener(myStatusListener);
-		//2836421 msnbc //96951800 fcbarcelona
-		
-		/*
-		 * TODO
-		 * follow @cnnbrk 428333
-		 * follow @barackobama 813286
-		 * follow @katyperry 21447363
-		*/
-		long[] users = {2836421};
+
+		long[] users = {428333, 813286, 21447363};
 		FilterQuery filterQuery = new FilterQuery();
 		filterQuery.follow(users);
 		
@@ -58,13 +52,3 @@ public class TweetCollectorDriver {
 @msnbc 2836421 
 @fcbarcelona 96951800 
  */
-
-/*	
-	//create separate listener for each handle
-	ArrayList<MyStatusListener> listeners = new ArrayList<MyStatusListener>();
-for (int i = 0; i < users.length; i++){
-	listeners.add(new MyStatusListener(users[i]));
-	MyStatusListener myStatusListener = listeners.get(i);
-	twitterStream.addListener(myStatusListener);
-
-}*/

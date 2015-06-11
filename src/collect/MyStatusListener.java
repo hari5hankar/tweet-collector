@@ -1,3 +1,4 @@
+package collect;
 
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -14,9 +15,10 @@ public class MyStatusListener implements StatusListener{
 
 	public void onStatus(Status status) {
 		// TODO Auto-generated method stub
+		if (status.isRetweet()){
 			TweetRecord tweetRecord = new TweetRecord(status);
-			System.out.println(tweetRecord.toString());
-			tweetRecord.appendToFile(); 			
+			tweetRecord.appendToFile(Long.toString(tweetRecord.originalUserId)); 
+		}			 			
 	}
 
 	public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
