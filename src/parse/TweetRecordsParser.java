@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,12 +24,14 @@ public class TweetRecordsParser {
 	
 	HashMap<Long, Integer> userIDMap; //Map <userId, number of retweets>
 	HashMap<Long, Integer> validatedUserIDMap; //Map <userId, number of retweets>
+	ArrayList<Long> followersList;
 	Twitter twitter;
 
 	public TweetRecordsParser() {
 		System.out.println("TweetRecordsParser()");
 		userIDMap = new HashMap<Long, Integer>();
 		validatedUserIDMap= new HashMap<Long, Integer>();
+		followersList = new ArrayList<Long>();
 		twitter = new TwitterFactory(collect.ConfigBuilder.getConfig()).getInstance();
 	}
 	
@@ -46,18 +49,62 @@ public class TweetRecordsParser {
 			String filename = Long.toString(mainUserID);
 			parseFileIntoMap(filename);
 			writeHashMapToFile(userIDMap, filename+ "_NV"); //test, write non validated 
-			getFollowersAndValidate(mainUserID); 
+			getFollowersIntoList(mainUserID); 
+			validate();
 			writeHashMapToFile(validatedUserIDMap, filename+ "_V");
 		}
 	}
 	
 	private void parseFileIntoMap(String filename){
+		System.out.println("parseFileIntoMap()");	
+		
+/*		try{
+			Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "US-ASCII"));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line;
+			try {
+			    int intch;
+			    while ((intch = reader.read()) != -1) {
+			      char ch = (char) intch;
+			      if (ch != ';') {
+			    	  stringBuilder.append(ch);
+			      } else{
+			    	
+			    	  line = stringBuilder.toString();   
+			    	System.out.println(line);
+					String[] tokens = line.split(",");
+					int length = tokens.length;
+					
+					//5th from last element is the userID in our String
+					long userID = Long.parseLong(tokens[length - 5]);
+					
+					if (userIDMap.get(userID) == null){
+						userIDMap.put(userID, 1);	
+					} else {
+						userIDMap.put(userID, userIDMap.get(userID) +1 );
+					}
+					stringBuilder = new StringBuilder();
+			      }
+			      
+			    }
+			  } finally {
+			    reader.close();
+			  }
+		}catch (IOException ioException){
+			ioException.printStackTrace();
+		}
+		*/		
+	
 		System.out.println("parseFileIntoMap()");		
 		String line;
 		try{
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
 			
 			while ((line = bufferedReader.readLine()) !=null) {
+				if(!(line.contains(";"))){
+					continue;
+				}
+				System.out.println(line);
 				String[] tokens = line.split(",");
 				int length = tokens.length;
 				//5th from last element is the userID in our String
@@ -76,22 +123,46 @@ public class TweetRecordsParser {
 		}
 	}
 	
-	private void getFollowersAndValidate(long mainUserID){
+	private void getFollowersIntoList(long mainUserID){
 		System.out.println("getFollowersAndValidate()");
-		 try {
-		        IDs ids = twitter.getFollowersIDs(mainUserID, -1);
-		        String filename = Long.toString(mainUserID);
-    			do{
-    				for (long userID : ids.getIDs()) { 
-    					if(userIDMap.containsKey(userID)) {
-    		 				validatedUserIDMap.put(userID , userIDMap.get(userID));
-    		 			}
-    				}
-	            } while (ids.hasNext());
-    			
+		
+        String filename = Long.toString(mainUserID) + "_L";
+		PrintWriter printWriter;
+
+		try {
+			
+			printWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
+		 	long cursor =-1L;
+	        int pageCount = 0;
+		 	IDs ids;
+	        do {
+	        	ids = twitter.getFollowersIDs(mainUserID, cursor);
+	        	for(long userID : ids.getIDs()){
+					followersList.add(userID);
+					printWriter.println(userID);
+	        	}
+	        	
+	        	System.out.println("page:"+ (++pageCount));
+				if (pageCount == 14){
+					Thread.sleep(900000);
+					pageCount = 0;
+				}
+				
+	        } while((cursor = ids.getNextCursor())!=0 );
+		 	
+	        printWriter.close();
 		 }catch (Exception e) {
 		        e.printStackTrace();
 		 }
+	}
+	
+	
+	private void validate(){		
+		for(Long userID : userIDMap.keySet()){
+			if ( (followersList.contains(userID)) ){
+				validatedUserIDMap.put(userID, userIDMap.get(userID));
+			}
+		}
 	}
 
 /*	//validates the Map<userID, number of retweets> against List<followers>
