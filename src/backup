@@ -59,3 +59,95 @@ for (int i = 0; i < users.length; i++){
 	twitterStream.addListener(myStatusListener);
 
 }*/
+
+
+/*	 //get followers
+	try {
+	            // get followers
+	            long cursor = -1;
+	            PagableResponseList<User> pagableFollowers;
+	            do {
+	                pagableFollowers = twitter.getFollowersList("cnnbrk", cursor);
+	                for (User user : pagableFollowers) {
+	                	followers.add(user.getId()); // ArrayList<User>
+	                	System.out.println(user.getId());
+	                }
+	            } while ((cursor = pagableFollowers.getNextCursor()) != 0);
+
+	        } catch (TwitterException twitterException) {
+	            twitterException.printStackTrace();
+	        }
+		 
+*/		 
+
+
+/*		
+	private void parseFileIntoMap(String filename){
+	try{
+			Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "US-ASCII"));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line;
+			try {
+			    int intch;
+			    while ((intch = reader.read()) != -1) {
+			      char ch = (char) intch;
+			      if (ch != ';') {
+			    	  stringBuilder.append(ch);
+			      } else{
+			    	
+			    	  line = stringBuilder.toString();   
+			    	System.out.println(line);
+					String[] tokens = line.split(",");
+					int length = tokens.length;
+					
+					//5th from last element is the userID in our String
+					long userID = Long.parseLong(tokens[length - 5]);
+					
+					if (userIDMap.get(userID) == null){
+						userIDMap.put(userID, 1);	
+					} else {
+						userIDMap.put(userID, userIDMap.get(userID) +1 );
+					}
+					stringBuilder = new StringBuilder();
+			      }
+			      
+			    }
+			  } finally {
+			    reader.close();
+			  }
+		}catch (IOException ioException){
+			ioException.printStackTrace();
+		}
+		}
+		*/
+		
+/*
+	  private void writeListToFile(String filename) {
+		  System.out.println("writeListToFile()"); try{ ObjectOutputStream
+		  objectOutputStream = new ObjectOutputStream(new
+		  FileOutputStream(filename)); for(Long userID: followersList){
+		  objectOutputStream.writeLong(userID); } objectOutputStream.close();
+	  }catch(IOException ioException){ 
+	  	ioException.printStackTrace(); 
+	  } 
+	 }
+*/		
+
+/*
+ //validates the Map<userID, number of retweets> against List<followers>
+	  private void validate(Long mainUserID) {
+	  
+	  System.out.println("validate()"); String filename =
+	  Long.toString(mainUserID); followersList.clear();
+	  
+	  try{ ObjectInputStream objectInputStream = new ObjectInputStream(new
+	  FileInputStream(filename + "_L"));
+	  
+	  while(true){ long userID = objectInputStream.readLong();
+	  if(userIDMap.containsKey(userID)){ validatedUserIDMap.put(userID ,
+	  userIDMap.get(userID)); } objectInputStream.close(); }
+	  
+	  }catch(IOException ioException){ ioException.printStackTrace(); }
+	  
+	  }
+*/	
