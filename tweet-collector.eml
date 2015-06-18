@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="junit-4.7.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/junit-4.7.jar!/"/>
+	</lib>
+	<lib name="opencsv-2.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/opencsv-2.3.jar!/"/>
+	</lib>
+	<lib name="slf4j-api-1.7.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.5.jar!/"/>
+	</lib>
+	<lib name="slf4j-log4j12-1.7.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/slf4j-log4j12-1.7.5.jar!/"/>
+	</lib>
+	<lib name="twitter4j-async-4.0.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/twitter4j-async-4.0.3.jar!/"/>
+	</lib>
+	<lib name="twitter4j-core-4.0.3.jar" scope="COMPILE">
+		<srcroot url="jar://$USER_HOME$/Downloads/twitter4j-master.zip!/"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/twitter4j-core-4.0.3.jar!/"/>
+	</lib>
+	<lib name="twitter4j-examples-4.0.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/twitter4j-examples-4.0.3.jar!/"/>
+	</lib>
+	<lib name="twitter4j-media-support-4.0.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/twitter4j-media-support-4.0.3.jar!/"/>
+	</lib>
+	<lib name="twitter4j-stream-4.0.3.jar" scope="COMPILE">
+		<srcroot url="file:///home/harishankar/Workspace/Twitter/twitter4j-master.zip"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/twitter4j-stream-4.0.3.jar!/"/>
+	</lib>
+	<lib name="log4j-1.2.17.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/log4j-1.2.17.jar!/"/>
+	</lib>
+</component>
