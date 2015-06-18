@@ -17,17 +17,14 @@ import twitter4j.TwitterFactory;
 public class TweetRecordsParser {
 
 	HashMap<Long, Integer> userIDMap; // Map <userId, number of retweets>
-	HashMap<Long, Integer> validatedUserIDMap; // Map <userId, number of
-												// retweets>
 	ArrayList<Long> followersList;
 	Twitter twitter;
 
 	public TweetRecordsParser() {
 		System.out.println("TweetRecordsParser()");
 		userIDMap = new HashMap<Long, Integer>();
-		validatedUserIDMap = new HashMap<Long, Integer>();
 		followersList = new ArrayList<Long>();
-		twitter = new TwitterFactory(collect.ConfigBuilder.getConfig())
+		twitter = new TwitterFactory(authorization.ConfigBuilder.getConfig())
 				.getInstance();
 	}
 
@@ -39,20 +36,20 @@ public class TweetRecordsParser {
 	 */
 
 	public void parse(Long... userIDsArray) {
+		
 		System.out.println("parse()");
 
 		for (Long mainUserID : userIDsArray) {
-			String filename = Long.toString(mainUserID);
-			parseFileIntoMap(filename);
-			writeHashMapToFile(userIDMap, filename + "_NV"); // test, write non validated
-			getFollowersIntoList(mainUserID);
-			validate();
-			writeHashMapToFile(validatedUserIDMap, filename + "_V");
+			parseAndWriteToFile(mainUserID);
 		}
 	}
 
-	private void parseFileIntoMap(String filename) {
-		System.out.println("parseFileIntoMap()");
+	public void parseAndWriteToFile(Long mainUserID) {
+		
+		userIDMap.clear();		followersList.clear();
+		String filename = Long.toString(mainUserID);
+		
+		System.out.println("parseAndWriteToFile()");
 		String line;
 		try {
 			BufferedReader bufferedReader = new BufferedReader(
@@ -79,63 +76,26 @@ public class TweetRecordsParser {
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
 		}
+		
+		writeHashMapToFile(mainUserID);
+		userIDMap.clear();		followersList.clear();
 	}
 
-	private void getFollowersIntoList(long mainUserID) {
-		System.out.println("getFollowersAndValidate()");
-
-		String filename = Long.toString(mainUserID) + "_L";
-		PrintWriter printWriter;
-
-		try {
-
-			printWriter = new PrintWriter(new BufferedWriter(new FileWriter(
-					filename, true)));
-			long cursor = -1L;
-			int pageCount = 0;
-			IDs ids;
-			do {
-				ids = twitter.getFollowersIDs(mainUserID, cursor);
-				for (long userID : ids.getIDs()) {
-					followersList.add(userID);
-					printWriter.println(userID);
-				}
-
-				System.out.println("page:" + (++pageCount));
-				if (pageCount == 14) {
-					Thread.sleep(900000);
-					pageCount = 0;
-				}
-
-			} while ((cursor = ids.getNextCursor()) != 0);
-
-			printWriter.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void validate() {
-		for (Long userID : userIDMap.keySet()) {
-			if ((followersList.contains(userID))) {
-				validatedUserIDMap.put(userID, userIDMap.get(userID));
-			}
-		}
-	}
-
-	
 	 
-	private void writeHashMapToFile(HashMap<Long, Integer> map, String filename) {
+	private void writeHashMapToFile(long userID) {
+		
+		String filename = Long.toString(userID) + "_NV"; 
 		System.out.println("writeHashMapToFile()");
 		try {
 			PrintWriter printWriter = new PrintWriter(new BufferedWriter(
 					new FileWriter(filename, true)));
-			for (HashMap.Entry<Long, Integer> entry : map.entrySet()) {
+			for (HashMap.Entry<Long, Integer> entry : userIDMap.entrySet()) {
 				printWriter.println(entry.getKey() + "," + entry.getValue());
 			}
 			printWriter.close();
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
 		}
+		
 	}
 }

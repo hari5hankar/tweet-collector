@@ -1,4 +1,4 @@
-package collect;
+package authorization;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -23,20 +23,29 @@ public class ConfigBuilder {
 
 */
         
-        //Harishankar's keys:
+/*        //Harishankar's keys:
         public static final String consumerKeyStr = "RCVjvrIN1nHF9UuddyWIw0GkO";
         public static final String consumerSecretStr ="0D0BeIdeVv8jp7pPBLrhmnas7dlHCEjxxlFLFinFtZWzkut3PQ";
         public static final String accessTokenStr ="2972666885-riSRlSUrmIOZH10msEa7bxOLj4BJVqKaI3GkUzC";
         public static final String accessTokenSecretStr ="pfHalw9HmwFtoVpongAFKod9C4oCzWCGCjeihbvUfiWXe";
-
+*/
+        
+        //Harishankar's keys:
+        public static final String consumerKeyStr = "Hh9V6RxrIrkgSI1lcFqwPEPAQ";
+        public static final String consumerSecretStr ="3bUdrH8LgZ4I525u9rnf17UneKh8RFyu9nuv44r5LmIBFAD4Fx";
+        public static final String accessTokenStr ="2972666885-RUy3lbSMgC6oIv6ZDqaL8k7YkAgYTt7PJYKfRnD";
+        public static final String accessTokenSecretStr ="Cv7MDgd7UELtCnTJgsWjuQWELCvu8sNSY7fhy6RYoegIU";
+        
         static {
-                ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-                configurationBuilder.setDebugEnabled(true);
-                configurationBuilder.setOAuthConsumerKey(consumerKeyStr);
-                configurationBuilder.setOAuthConsumerSecret(consumerSecretStr);
-                configurationBuilder.setOAuthAccessToken(accessTokenStr);
-                configurationBuilder.setOAuthAccessTokenSecret(accessTokenSecretStr);
-                configuration = configurationBuilder.build();
+        	//TODO ask for config number from stdin
+        	
+			ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+			configurationBuilder.setDebugEnabled(true);
+			configurationBuilder.setOAuthConsumerKey(consumerKeyStr);
+			configurationBuilder.setOAuthConsumerSecret(consumerSecretStr);
+			configurationBuilder.setOAuthAccessToken(accessTokenStr);
+			configurationBuilder.setOAuthAccessTokenSecret(accessTokenSecretStr);
+			configuration = configurationBuilder.build();
         }
 
         public static Configuration getConfig() {

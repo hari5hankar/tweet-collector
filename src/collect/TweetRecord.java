@@ -91,8 +91,8 @@ String columns[] = {"statusDate", "statusId", "statusText",  "statusInReplyToSta
 				+ ";";
 	}
 		
-	public void appendToFile(String filename){
-		 
+	public void appendToFile(long originalUserID){
+		 String filename = Long.toString(originalUserID);
 		try{
 			PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
 			printWriter.println(this.toString());

@@ -17,7 +17,7 @@ public class MyStatusListener implements StatusListener{
 		// TODO Auto-generated method stub
 		if (status.isRetweet()){
 			TweetRecord tweetRecord = new TweetRecord(status);
-			tweetRecord.appendToFile(Long.toString(tweetRecord.originalUserId)); 
+			tweetRecord.appendToFile(tweetRecord.originalUserId); 
 		}			 			
 	}
 

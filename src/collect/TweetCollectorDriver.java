@@ -18,6 +18,7 @@ package collect;
 
 //import twitter4j.conf.ConfigurationBuilder;
 //import twitter4j.User ;
+import authorization.ConfigBuilder;
 import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
@@ -29,11 +30,11 @@ public class TweetCollectorDriver {
 	public static void main(String[] args) {
 
 
-		TwitterStream twitterStream = new TwitterStreamFactory(ConfigBuilder.getConfig()).getInstance();
+		TwitterStream twitterStream = new TwitterStreamFactory(authorization.ConfigBuilder.getConfig()).getInstance();
 		MyStatusListener myStatusListener = new MyStatusListener();
 		twitterStream.addListener(myStatusListener);
 
-		long[] users = {428333, 813286, 21447363};
+		long[] users = {90160901, 96951800};
 		FilterQuery filterQuery = new FilterQuery();
 		filterQuery.follow(users);
 		
