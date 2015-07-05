@@ -1,81 +1,97 @@
 package collect;
 
-//import org.slf4j.Logger;
-
-//import org.slf4j.LoggerFactory;
-
-//import java.io.BufferedReader;
-//import java.io.FileInputStream;
-//import java.io.InputStreamReader;
-//import java.util.ArrayList;
-
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import twitter4j.StallWarning;
-//import twitter4j.Status;
-//import twitter4j.StatusDeletionNotice;
-//import twitter4j.StatusListener;
-
-//import twitter4j.conf.ConfigurationBuilder;
-//import twitter4j.User ;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.HashSet;
 
+import authorization.ConfigBuilder;
 import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
+
+
 public class TweetCollectorDriver {
 
-	//private static transient final Logger LOG = LoggerFactory.getLogger(TweetCollectorDriver.class);
+	File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\data");
+	
+	/*
+	 * The constructor accepts a round number and
+	 * finds out whom to follow in the next round.
+	 * Gets all the values in a list, and starts following. 
+	 */
+	public TweetCollectorDriver(int round) {
 
-	static ArrayList<Long> usersList = new ArrayList<Long>();
+		TwitterStream twitterStream = new TwitterStreamFactory(ConfigBuilder.getConfig()).getInstance();
 
-	public static void main(String[] args) {
-		String line;
-		try{
-			BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(new FileInputStream("428333_813286_21447363_NV_MA_F.csv")));
+		HashSet<Long> usersToFollowSet = new HashSet<Long>();
+		goDeeper(rootDirectory, round, usersToFollowSet);
 
-			while ((line = bufferedReader.readLine()) != null) {
-				usersList.add(Long.parseLong(line));
-			}
-			bufferedReader.close();
-		}catch (Exception e){
-			e.printStackTrace();
-		}
+		System.out.println(usersToFollowSet.toString());
+		System.out.println(usersToFollowSet.size());
 
-		usersList.add(19715694L); //UBcommunity
-		usersList.add(2836421L); //msnbc
+		MyStatusListener mSL = new MyStatusListener(usersToFollowSet);
+		twitterStream.addListener(mSL);
 
-		TwitterStream twitterStream = new TwitterStreamFactory(authorization.ConfigBuilder.getConfig()).getInstance();
-		MyStatusListener myStatusListener = new MyStatusListener();
-		twitterStream.addListener(myStatusListener);
-
-
-		long[] usersArray = new long[usersList.size()];
-		for(int i = 0; i< usersList.size(); i++){
-			usersArray[i] = usersList.get(i);
-
+		long[] usersArray = new long[usersToFollowSet.size()];
+		int i = 0;
+		for (long user : usersToFollowSet) {
+			usersArray[i++] = user;
 		}
 
 		FilterQuery filterQuery = new FilterQuery();
 		filterQuery.follow(usersArray);
-		
-		/* //TODO ? check for manual retweets
-			String[] keywords = {"RT @FCBarcelona"}; 
-			filterQuery.track(keywords);
-		*/
 		twitterStream.filter(filterQuery);
-	}
-}
 
-/*
-@cnnbrk 428333
-@barackobama 813286
-@katyperry 21447363
-@msnbc 2836421 
-@fcbarcelona 96951800 
- */
+	}
+
+	public void goDeeper(File directory, int level, HashSet<Long> set) {
+
+		if (level == 0) {
+
+			try {
+
+				File validatedListFile = new File(
+						directory.getAbsolutePath() + "\\" + directory.getName() + "_MA5_V.csv");
+				BufferedReader bR = new BufferedReader(new InputStreamReader(new FileInputStream(validatedListFile)));
+				String line = bR.readLine();
+
+				while (line != null) {
+					String[] tokens = line.split(",");
+					set.add(Long.parseLong(tokens[0]));
+					line = bR.readLine();
+				}
+
+				bR.close();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				System.exit(-1);
+			}
+
+			return;
+		}
+
+		for (File file : directory.listFiles()) {
+
+			if (file.isDirectory()) {
+				goDeeper(file, (level - 1), set);
+			}
+
+		}
+	}
+
+	public static void main(String[] args) {
+		
+		new TweetCollectorDriver(3);
+
+	}
+
+}
