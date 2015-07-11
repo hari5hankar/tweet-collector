@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CopyTweetsByID {
 
-	static File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\");
+	static File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\data\\");
 
 	public CopyTweetsByID(int round) {
 
@@ -19,7 +19,28 @@ public class CopyTweetsByID {
 
 	}
 
-	public void readIntoList(File file, List<Long> list) {
+
+	public void goDeeper(File directory, int level) {
+
+		if (level == 0) {
+
+			List<Long> validatedList = new ArrayList<Long>();
+			File validatedListFile = new File(directory.getAbsolutePath() + "\\" + directory.getName() + "_MA5_V.csv");
+			readFileIntoList(validatedListFile, validatedList);
+			copy(validatedList, directory);
+			System.out.println(validatedListFile.getName() + " copied");
+		}
+
+		for (File file : directory.listFiles()) {
+
+			if (file.isDirectory()) {
+				goDeeper(file, (level - 1));
+			}
+
+		}
+	}
+	
+	public void readFileIntoList(File file, List<Long> list) {
 
 		try {
 			BufferedReader b = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
@@ -36,44 +57,34 @@ public class CopyTweetsByID {
 
 	}
 
-	public void goDeeper(File directory, int level) {
+	
+	public void copy(List<Long> list, File directory){
+		
+		for (long id : list) {
 
-		if (level == 0) {
+			File directoryForThisUser = new File(directory.getAbsolutePath() + "\\" + id + "\\");
+			directoryForThisUser.mkdirs();
 
-			List<Long> validatedList = new ArrayList<Long>();
-			File validatedListFile = new File(directory.getAbsolutePath() + "\\" + directory.getName() + "_MA5_V.csv");
+			final File source = new File(rootDirectory + "\\" + Long.toString(id) + ".raw");
 
-			readIntoList(validatedListFile, validatedList);
-
-			for (long id : validatedList) {
-
-				File directoryForThisUser = new File(directory.getAbsolutePath() + "\\" + id + "\\");
-				directoryForThisUser.mkdirs();
-
-				final File source = new File(Long.toString(id) + ".raw");
-				final File destination = new File(
-						directory.getAbsolutePath() + "\\" + id + "\\" + Long.toString(id) + ".raw");
-				try {
-					Files.copy(source.toPath(), destination.toPath());
-				} catch (IOException io) {
-					io.printStackTrace();
-				}
+			if (!source.exists()) {
+				directoryForThisUser.delete();
+				continue;
 			}
 
-		}
-
-		for (File file : directory.listFiles()) {
-
-			if (file.isDirectory()) {
-				goDeeper(file, (level - 1));
+			final File destination = new File(
+					directory.getAbsolutePath() + "\\" + id + "\\" + Long.toString(id) + ".raw");
+			try {
+				Files.copy(source.toPath(), destination.toPath());
+			} catch (IOException io) {
+				io.printStackTrace();
 			}
-
 		}
 	}
 
 	public static void main(String[] args) {
 
-		new CopyTweetsByID(3);
+		new CopyTweetsByID(2);
 
 	}
 }
