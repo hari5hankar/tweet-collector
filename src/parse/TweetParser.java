@@ -32,11 +32,10 @@ public class TweetParser {
 
 		if (level == 0) {
 
-			
 			File tweetsFile = new File(directory.getAbsolutePath() + "\\" + directory.getName() + ".raw");
 			parse(tweetsFile);
-			System.out.print(tweetsFile.getName() + " parsed");
-			
+			System.out.println(tweetsFile.getName() + " parsed");
+
 			return;
 		}
 
@@ -50,9 +49,8 @@ public class TweetParser {
 	}
 
 	/*
-	 * parses file corresponding to id writes to a new file, with 
-	 * entry as <user>, <number of retweets>, 
-	 * in the same directory.
+	 * parses file corresponding to id writes to a new file, with entry as
+	 * <user>, <number of retweets>, in the same directory.
 	 */
 	public static void parse(File file) {
 
@@ -61,10 +59,11 @@ public class TweetParser {
 
 		Map<Long, Integer> map = new LinkedHashMap<Long, Integer>();
 		String line;
-		
+
 		try {
 			BufferedReader b = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-			while ((line = b.readLine()) != null) {
+			line = b.readLine();
+			while (line != null) {
 				if (line.contains("userID")) {
 					String[] token = line.split(":");
 					Long userID = Long.parseLong(token[1]);
@@ -74,6 +73,7 @@ public class TweetParser {
 						map.put(userID, 1);
 					}
 				}
+				line = b.readLine();
 			}
 			b.close();
 		} catch (IOException e) {
@@ -83,24 +83,31 @@ public class TweetParser {
 		map = sortByComparator(map);
 
 		try {
-			File f = new File(file.getParentFile().getAbsolutePath() + "\\" + Long.toString(id) + "_NV_MA5.csv");
-			PrintWriter p = new PrintWriter(new FileWriter(f));
+			File allRetweetersFile = new File(
+					file.getParentFile().getAbsolutePath() + "\\" + Long.toString(id) + "_NV.csv");
+			File mostActiveRetweetersFile = new File(
+					file.getParentFile().getAbsolutePath() + "\\" + Long.toString(id) + "_NV_MA5.csv");
+			PrintWriter p1 = new PrintWriter(new FileWriter(allRetweetersFile));
+			PrintWriter p2 = new PrintWriter(new FileWriter(mostActiveRetweetersFile));
 
 			for (Map.Entry<Long, Integer> entry : map.entrySet()) {
+				p1.println(entry.getKey() + "," + entry.getValue());
+				p1.flush();
 				if (entry.getValue() >= 5) {
-					p.println(entry.getKey() + "," + entry.getValue());
-					p.flush();
+					p2.println(entry.getKey() + "," + entry.getValue());
+					p2.flush();
 				}
+
 			}
-			p.close();
+			p1.close();
+			p2.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/*
-	 * sorts a hashmap. 
-	 * from mykong.com
+	 * sorts a hashmap. from mykong.com
 	 */
 	private static LinkedHashMap<Long, Integer> sortByComparator(Map<Long, Integer> unsortedMap) {
 
@@ -125,7 +132,7 @@ public class TweetParser {
 
 	public static void main(String[] args) {
 
-		new TweetParser(3);
+		new TweetParser(2);
 
 	}
 }
