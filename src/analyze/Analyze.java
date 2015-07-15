@@ -27,18 +27,21 @@ public class Analyze {
 	int totalMostActiveRetweeters = 0;
 	int totalMostActiveFollowerRetweeters = 0;
 	int totalRetweetedInNextRound = 0;
-	File retweetsFollowersFollowingFile;
+	File retweetsDoneFollowersFollowingFile;
+	File retweetsHadFollowersFollowingFile;
 	
 	public Analyze(long root) {
 		this.root = root;
 		this.rootDirectory = new File("data\\" + Long.toString(this.root) + "\\");
-		System.out.println(rootDirectory.getAbsolutePath());
 	}
 
 	public void analyze(int round) {
 		this.round = round;
-		this.retweetsFollowersFollowingFile = new File(
+		this.retweetsDoneFollowersFollowingFile = new File(
 				"analysis\\" + Integer.toString(round) + "\\" + Long.toString(root) + "_RFF_DONE.csv");
+		this.retweetsHadFollowersFollowingFile = new File(
+				"analysis\\" + Integer.toString(round) + "\\" + Long.toString(root) + "_RFF_HAD.csv");
+		
 		goDeeper(rootDirectory, round);
 	}
 
@@ -47,18 +50,18 @@ public class Analyze {
 
 		if (level == 1) {
 
-			retweetsFollowersFollowingDone(directory);
+			retweetsFollowersFollowingHad(directory);
 			/*
-			 * totalTweets(directory); totalRetweeters(directory);
-			 * totalMostActiveRetweeters(directory);
-			 * totalMostActiveFollowerRetweeters(directory);
-			 * totalRetweetedInNextRound(directory);
+			  retweetsFollowersFollowingDone(directory);
+			  totalTweets(directory); totalRetweeters(directory);
+			  totalMostActiveRetweeters(directory);
+			  totalMostActiveFollowerRetweeters(directory);
+			  totalRetweetedInNextRound(directory);
 			 */
 			return;
 		}
 
 		for (File file : directory.listFiles()) {
-
 			if (file.isDirectory()) {
 				goDeeper(file, (level - 1));
 			}
@@ -137,6 +140,63 @@ public class Analyze {
 		this.totalRetweetedInNextRound += total;
 		return total;
 	}
+	
+	public void retweetsFollowersFollowingHad(File directory) {
+		int retweetsHad = 0;
+		int followers = 0;
+		int following = 0;
+		try {
+			File mostActiveFollowersFile = new File(
+					directory.getAbsolutePath() + "\\" + directory.getName() + "_NV.csv");
+			System.out.println(mostActiveFollowersFile.getAbsolutePath());
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mostActiveFollowersFile)));
+			
+			String line;
+			line = br.readLine();
+			while (line != null) {
+				String[] tokens = line.split(",");
+				line = br.readLine();
+				retweetsHad += Integer.parseInt(tokens[1]);
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		apiCallCount++;
+		totalCallCount++;
+		System.out.println("    count: api:  " + apiCallCount + " total:  " + totalCallCount);
+
+		if (apiCallCount == 179) {
+			try {
+				System.out.println("    sleeping...");
+				Thread.sleep(900000);
+				apiCallCount = 0;
+			} catch (InterruptedException inte) {
+				inte.printStackTrace();
+			}
+		}
+
+		try {
+			Twitter twitter = new TwitterFactory(authorization.ConfigBuilder.getConfig()).getInstance();
+			
+			User user = twitter.showUser(Long.parseLong(directory.getName()));
+			followers = user.getFollowersCount();
+			following = user.getFriendsCount();
+		} catch (TwitterException te) {
+			te.printStackTrace();
+		}
+		
+		try{
+			PrintWriter pw = new PrintWriter(new FileWriter(this.retweetsHadFollowersFollowingFile, true));
+			pw.println(directory.getName() + "," + retweetsHad + "," + followers + "," + following);
+			pw.flush();
+			pw.close();
+		}catch(IOException ioe) {
+			ioe.printStackTrace();
+		}
+			
+	}
 
 	public void retweetsFollowersFollowingDone(File directory) {
 		Twitter twitter = new TwitterFactory(authorization.ConfigBuilder.getConfig()).getInstance();
@@ -146,7 +206,7 @@ public class Analyze {
 					directory.getAbsolutePath() + "\\" + directory.getName() + "_MA5_V.csv");
 			System.out.println(mostActiveFollowersFile.getAbsolutePath());
 			
-			PrintWriter pw = new PrintWriter(new FileWriter(this.retweetsFollowersFollowingFile, true));
+			PrintWriter pw = new PrintWriter(new FileWriter(this.retweetsDoneFollowersFollowingFile, true));
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mostActiveFollowersFile)));
 			String line;
@@ -198,11 +258,17 @@ public class Analyze {
 
 	public static void main(String[] args) {
 
-		Analyze a1 = new Analyze(428333);
-		a1.analyze(3);
-		a1 = new Analyze(813286); 
-		a1.analyze(3); 
-		a1 = new Analyze(21447363);
-		a1.analyze(3);
+		new Analyze(428333).analyze(1);
+		new Analyze(813286).analyze(1);
+		new Analyze(21447363).analyze(1);
+		
+		new Analyze(428333).analyze(2);
+		new Analyze(813286).analyze(2);
+		new Analyze(21447363).analyze(2);
+		
+		new Analyze(428333).analyze(3);
+		new Analyze(813286).analyze(3);
+		new Analyze(21447363).analyze(3);
+		
 	}
 }
