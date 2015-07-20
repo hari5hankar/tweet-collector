@@ -17,12 +17,11 @@ import twitter4j.TwitterStreamFactory;
 
 public class TweetCollectorDriver {
 
-	File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\data");
+	File rootDirectory = new File("data");
 	
 	/*
 	 * The constructor accepts a round number and
-	 * finds out whom to follow in the next round.
-	 * Gets all the values in a list, and starts following. 
+	 * finds out whom to follow in the next round and starts following. 
 	 */
 	public TweetCollectorDriver(int round) {
 
@@ -34,7 +33,7 @@ public class TweetCollectorDriver {
 		System.out.println(usersToFollowSet.toString());
 		System.out.println(usersToFollowSet.size());
 
-		MyStatusListener mSL = new MyStatusListener(usersToFollowSet);
+	MyStatusListener mSL = new MyStatusListener(usersToFollowSet);
 		twitterStream.addListener(mSL);
 
 		long[] usersArray = new long[usersToFollowSet.size()];
@@ -46,7 +45,6 @@ public class TweetCollectorDriver {
 		FilterQuery filterQuery = new FilterQuery();
 		filterQuery.follow(usersArray);
 		twitterStream.filter(filterQuery);
-
 	}
 
 	public void goDeeper(File directory, int level, HashSet<Long> set) {

@@ -65,7 +65,7 @@ public class TweetRecord {
 	
 	public void appendToFile(){
 		
-		File file = new File(Long.toString(this.originalUserId) + ".raw");
+		File file = new File("data\\" + Long.toString(this.originalUserId) + ".raw");
 		System.out.println("appending to :" + file.getName());
 		
 		try{

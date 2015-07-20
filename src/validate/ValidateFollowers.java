@@ -17,7 +17,7 @@ import twitter4j.TwitterFactory;
 
 public class ValidateFollowers {
 
-	static File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\data\\");
+	static File rootDirectory = new File("data\\");
 
 	public ValidateFollowers(int round) {
 
@@ -30,6 +30,7 @@ public class ValidateFollowers {
 		if (level == 0) {
 
 			File parsedTweetsFile = new File(directory.getAbsolutePath() + "\\" + directory.getName() + "_NV_MA5.csv");
+			System.out.println(parsedTweetsFile.getAbsolutePath());
 			validate(parsedTweetsFile);
 			System.out.println(parsedTweetsFile.getName() + " validated");
 			return;
@@ -104,14 +105,13 @@ public class ValidateFollowers {
 			e.printStackTrace();
 		} catch (TwitterException te) {
 			te.printStackTrace();
-			System.exit(0);
 		}
 
 	}
 
 	public static void main(String[] args) {
 
-		new ValidateFollowers(3);
+		new ValidateFollowers(4);
 
 	}
 }

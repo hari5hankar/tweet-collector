@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CopyTweetsByID {
 
-	static File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\data\\");
+	static File rootDirectory = new File("data\\");
 
 	public CopyTweetsByID(int round) {
 
@@ -28,7 +28,7 @@ public class CopyTweetsByID {
 			File validatedListFile = new File(directory.getAbsolutePath() + "\\" + directory.getName() + "_MA5_V.csv");
 			readFileIntoList(validatedListFile, validatedList);
 			copy(validatedList, directory);
-			System.out.println(validatedListFile.getName() + " copied");
+			System.out.println("followers of " + validatedListFile.getName() + " copied");
 		}
 
 		for (File file : directory.listFiles()) {
@@ -84,7 +84,7 @@ public class CopyTweetsByID {
 
 	public static void main(String[] args) {
 
-		new CopyTweetsByID(2);
+		new CopyTweetsByID(3);
 
 	}
 }

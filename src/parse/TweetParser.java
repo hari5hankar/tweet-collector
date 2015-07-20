@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class TweetParser {
 
-	static File rootDirectory = new File("C:\\Users\\Security\\Workspace\\tweet-collector\\data\\");
+	static File rootDirectory = new File("data");
 	Map<String, Integer> map = new HashMap<String, Integer>();
 
 	public TweetParser(int round) {
@@ -54,6 +54,7 @@ public class TweetParser {
 	 */
 	public static void parse(File file) {
 
+		System.out.println(file.getAbsolutePath());
 		String[] filename = file.getName().split("\\.");
 		long id = Long.parseLong(filename[0]);
 
@@ -132,7 +133,7 @@ public class TweetParser {
 
 	public static void main(String[] args) {
 
-		new TweetParser(2);
+		new TweetParser(4);
 
 	}
 }

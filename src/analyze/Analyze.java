@@ -25,7 +25,7 @@ public class Analyze {
 	int totalRetweeters = 0;
 	int totalTweets = 0;
 	int totalMostActiveRetweeters = 0;
-	int totalMostActiveFollowerRetweeters = 0;
+	int totalMostActiveFollowers = 0;
 	int totalRetweetedInNextRound = 0;
 	File retweetsDoneFollowersFollowingFile;
 	File retweetsHadFollowersFollowingFile;
@@ -43,6 +43,8 @@ public class Analyze {
 				"analysis\\" + Integer.toString(round) + "\\" + Long.toString(root) + "_RFF_HAD.csv");
 		
 		goDeeper(rootDirectory, round);
+		System.out.println();
+		System.out.println(totalMostActiveRetweeters);
 	}
 
 
@@ -50,14 +52,14 @@ public class Analyze {
 
 		if (level == 1) {
 
-			retweetsFollowersFollowingHad(directory);
-			/*
+			  totalMostActiveRetweeters(directory);
+/*			  retweetsFollowersFollowingHad(directory);
 			  retweetsFollowersFollowingDone(directory);
 			  totalTweets(directory); totalRetweeters(directory);
 			  totalMostActiveRetweeters(directory);
 			  totalMostActiveFollowerRetweeters(directory);
 			  totalRetweetedInNextRound(directory);
-			 */
+*/			 
 			return;
 		}
 
@@ -117,16 +119,17 @@ public class Analyze {
 		File mostActiveRetweetersFile = new File(
 				directory.getAbsolutePath() + "\\" + directory.getName() + "_NV_MA5.csv");
 		int total = countLines(mostActiveRetweetersFile);
+		System.out.println(mostActiveRetweetersFile.getName() + "," + total);
 		this.totalMostActiveRetweeters += total;
 		return total;
 
 	}
 
-	public int totalMostActiveFollowerRetweeters(File directory) {
-		File mostActiveFollowerRetweetersFile = new File(
+	public int totalMostActiveFollowers(File directory) {
+		File mostActiveFollowersFile = new File(
 				directory.getAbsolutePath() + "\\" + directory.getName() + "_MA5_V.csv");
-		int total = countLines(mostActiveFollowerRetweetersFile);
-		this.totalMostActiveFollowerRetweeters += total;
+		int total = countLines(mostActiveFollowersFile);
+		this.totalMostActiveFollowers += total;
 		return total;
 	}
 
@@ -258,17 +261,7 @@ public class Analyze {
 
 	public static void main(String[] args) {
 
-		new Analyze(428333).analyze(1);
-		new Analyze(813286).analyze(1);
-		new Analyze(21447363).analyze(1);
-		
-		new Analyze(428333).analyze(2);
-		new Analyze(813286).analyze(2);
-		new Analyze(21447363).analyze(2);
-		
-		new Analyze(428333).analyze(3);
-		new Analyze(813286).analyze(3);
-		new Analyze(21447363).analyze(3);
+		new Analyze(428333).analyze(4);
 		
 	}
 }
